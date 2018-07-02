@@ -1,0 +1,181 @@
+<div data-role="view" data-title="Home" data-layout="main-nonav" data-model="app.home" data-show="app.home.onShow" data-after-show="app.home.afterShow"
+    id="homeScreen" class="screen">
+    <header data-role="header">
+        <div data-role="navbar" class="header-text">
+                <a data-role="button" class="nav-button" data-align="left" data-role="button" href="#about" data-rel="drawer" data-icon="drawer-icon"></a>
+            <a data-role="button" class="nav-button" data-align="right" href="#components/home/view.html">
+                <span data-bind="text : homeModel.totalexp"></span>
+            </a>
+            <span data-role="view-title">My House</span>
+            <span class="km-view-subtitle">Expense and Tracker</span>
+
+        </div>
+    </header>
+
+    <div class="container" style="height:100%">
+        <!-- Page Content goes here -->
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            Add new item
+                            <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" data-bind="events :{click:homeModel.addNewItem}">
+                                <i class="material-icons">add</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                Salary for
+                <span data-bind="text : homeModel.month"></span> : ₹
+                <span data-bind="text : homeModel.salary"></span>
+                <em id="iconButton"></em>
+            </div>
+
+        </div>
+        <h2>Expense for Current Month</h2>
+        <div class="section" id="expenses">
+        </div>
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                Salary for
+                <span data-bind="text : homeModel.month"></span> :
+                <input type="number" title="salary" value="30" id="salary" data-bind="value: homeModel.salary" style="width: 100%;" /> Choose a Month:
+                <div class="custom-radios">
+                    <div>
+                        <input type="radio" id="color-1" name="selectedmonth" data-bind="value: homeModel.prevMonth" checked>
+                        <label for="color-1">
+                            <p data-bind="text: homeModel.prevmonth"></p>
+                            <span>
+                                <img src="/images/check-icn.svg" alt="Checked Icon" />
+                            </span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="color-2" name="selectedmonth" data-bind="value: homeModel.month">
+                        <label for="color-2">
+                            <p data-bind="text: homeModel.month"></p>
+                            <span>
+                                <img src="/images/check-icn.svg" alt="Checked Icon" />
+                            </span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="color-3" name="selectedmonth" data-bind="value: homeModel.nextmonth">
+                        <label for="color-3">
+                            <p data-bind="text: homeModel.nextmonth"></p>
+                            <span>
+                                <img src="/images/check-icn.svg" alt="Checked Icon" />
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a data-bind="events:{click: homeModel.saveSalary}" class="modal-close waves-effect waves-green btn-flat">Save</a>
+            </div>
+        </div>
+
+
+    </div>
+    <div data-role="footer">
+        <div class="footerSticky" id="footerFixed" style="transform: translateY(0px);">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col s3">
+                    <div class="bottomNav col-primary activeNav">
+                        <a href="">
+                            <i class="material-icons">home</i>
+                            <span class="bottomNav__txt">Home</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/task/view.html">
+                            <i class="material-icons">list_alt</i>
+                            <span class="bottomNav__txt">To Do</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/category/cat.html">
+                            <i class="material-icons">notifications_active</i>
+                            <span class="bottomNav__txt">
+                                <i data-bind="text : homeModel.nocategory }"></i> Alerts</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/category/cat.html">
+                            <i class="material-icons">more</i>
+                            <span class="bottomNav__txt">More</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-kendoe-template" id="expenseTemplate1">
+# for(var i =0; i < data.length;i++) {#
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">${data[i].item}<i class="material-icons right">more_vert</i></span>
+                <p>${data[i].type} - ₹ ${data[i].amount} 
+                    </p>
+            </div>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">${data[i].item}<i class="material-icons right">close</i></span>
+                <p>
+                    <strong>Category</strong> : ${data[i].category}
+                    <strong>Date</strong> : #= data[i].date.split("T")[0] #
+                </p>
+            </div>
+            <div class="card-action">
+                <a href="javascript:void(0)" onclick="edit(${data[i].id});">Edit</a>
+                <a href="javascript:void(0)" onclick="delete(${data[i].id});">Delete</a>
+            </div>
+        </div>
+    </div>
+#}#
+</script>
+<script type="text/x-kendoe-template" id="expenseTemplate">
+    <ul class="collection">
+    # for(var i =0; i < data.length;i++) {#
+    <li class="collection-item avatar">
+        # if(!data[i].category){ #
+            <img src="components/home/nocat.png" alt="" class="circle">
+        #}else {#
+            <img src="components/home/${data[i].category}.png" alt="" class="circle">
+        #}#
+      <span class="title">${data[i].item}</span>
+      <p>${data[i].type} - ₹ ${data[i].amount}  <br>
+        Date : #= data[i].date.split("T")[0] #
+      </p>
+      <a href="" class="secondary-content"><i class="material-icons">keyboard_arrow_right</i></a>
+    </li>
+    #}#
+  </ul>
+</script>
+
+<div data-role="drawer" data-stretch="true" id="about" data-before-show="disableInSourceCode">
+        <div data-role="header">
+            <div data-role="navbar">
+                <img src="/components/home/House.png" data-align="left" style="width: 3em; height: 3    em" id="logo"> <h2>Home</h2>
+            </div>
+        </div>
+
+        <ul data-role="listview" id="external-resources">
+            <li><a data-rel="external" href="http://www.telerik.com/kendo-ui">Product Overview</a></li>
+            <li><a data-rel="external" href="http://www.telerik.com/purchase/kendo-ui">Pricing</a></li>
+            <li><a data-rel="external" href="http://www.telerik.com/download/kendo-ui">Try Now</a></li>
+        </ul>
+
+    </div>

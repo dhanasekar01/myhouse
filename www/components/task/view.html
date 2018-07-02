@@ -1,0 +1,92 @@
+﻿<div data-role="view" data-title="House" data-layout="main-nonav" data-show="app.task.onShow" data-after-show="app.task.afterShow"
+    data-model="app.task" id="dashScreen" class="screen">
+    <header data-role="header">
+        <div data-role="navbar" class="header-text">
+            <span>To Do List</span>
+            <a data-role="backbutton" data-align="left">Back</a>
+        </div>
+    </header>
+    <div class="content">
+
+        <div class="content-inner">
+            <div class="container">
+                <div class="row">
+                    <ul data-role="listview" data-style="inset" data-type="group">
+                        <li>
+                            Add new item
+                            <ul>
+                                <li>
+                                    <label class="km-label-above">Item name
+                                        <input id="tasknewitem" type="text" placeholder="e.g. Milk" data-bind="value: taskModel.newitem" />
+                                    </label>
+                                </li>
+                                <li>
+                                    <button data-bind="events: { click: taskModel.add }" class="km-justified km-widget km-button km-primary km-small">Add</button>
+                                </li>
+                            </ul>
+
+                        </li>
+
+                        <li>
+                            Items
+                            <ul id="tasklistul" data-bind="source: taskModel.source" data-template="itemTemplate"></ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div data-role="footer">
+        <div class="footerSticky" id="footerFixed" style="transform: translateY(0px);">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col s3">
+                    <div class="bottomNav col-primary activeNav">
+                        <a href="">
+                            <i class="material-icons">home</i>
+                            <span class="bottomNav__txt">Home</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/task/view.html">
+                            <i class="material-icons">list_alt</i>
+                            <span class="bottomNav__txt">To Do</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/category/cat.html">
+                            <i class="material-icons">notifications_active</i>
+                            <span class="bottomNav__txt">
+                                <i data-bind="text : taskModel.nocategory }"></i> Alerts</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="bottomNav col-primary ">
+                        <a href="#components/category/cat.html">
+                            <i class="material-icons">more</i>
+                            <span class="bottomNav__txt">More</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script id="itemTemplate" type="text/x-kendo-template">
+    <li>
+        <a data-role="detailbutton" class="km-style-error"  data-bind="click: taskModel.delete" data-icon="trash"></a>
+        <label>
+            <input type="checkbox" class="filled-in" data-bind:"checked : status"  />
+            <span data-bind="text : item"></span>
+        </label> <br/>
+        <label>
+            Created on:
+            <span data-bind="text: date"></span>
+        </label>
+    </li>
+</script>
