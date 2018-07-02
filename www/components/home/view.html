@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-content">
                             Add new item
-                            <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" href="#components/item/newitem.html">
+                            <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" href="#components/item/newItem.html">
                                 <i class="material-icons">add</i>
                             </a>
                         </div>
@@ -31,7 +31,7 @@
                 Salary for
                 <span data-bind="text : homeModel.month"></span> : ₹
                 <span data-bind="text : homeModel.salary"></span>
-                <em id="iconButton"></em>
+                <i id="salaryedit" class="tiny material-icons">edit</i>
             </div>
 
         </div>
@@ -42,10 +42,10 @@
             <div class="modal-content">
                 Salary for
                 <span data-bind="text : homeModel.month"></span> :
-                <input type="number" title="salary" value="30" id="salary" data-bind="value: homeModel.salary" style="width: 100%;" /> Choose a Month:
+                <input type="number" title="salary" value="30" id="salary" data-bind="value: homeModel.newsalary" style="width: 100%;" /> Choose a Month:
                 <div class="custom-radios">
                     <div>
-                        <input type="radio" id="color-1" name="selectedmonth" data-bind="value: homeModel.prevMonth" checked>
+                        <input type="radio" id="color-1" name="selectedmonth" data-bind="value: homeModel.prevmonth">
                         <label for="color-1">
                             <p data-bind="text: homeModel.prevmonth"></p>
                             <span>

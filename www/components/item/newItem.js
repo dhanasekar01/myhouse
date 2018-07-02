@@ -51,7 +51,7 @@ app.localization.registerView('newItem');
                 if(newItemModel.item && newItemModel.amount){
 
                     if(!newItemModel.category){
-                        newItemModel.saveInlocalnoid("notcategory",newItemModel.item)
+                        newItemModel.saveInlocalnoid("notcategory", { "item" : newItemModel.item })
                     }
 
                     var date =newItemModel.expensedate;

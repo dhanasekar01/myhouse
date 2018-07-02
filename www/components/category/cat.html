@@ -1,4 +1,4 @@
-<div data-role="view" data-title="cat" data-layout="main-nonav" data-model="app.cat" data-show="app.cat.onShow" data-after-show="app.cat.afterShow"
+<div data-role="view" data-title="My Home" data-layout="main-nonav" data-model="app.cat" data-show="app.cat.onShow" data-after-show="app.cat.afterShow"
     id="catScreen" class="screen">
     <header data-role="header">
         <div data-role="navbar" class="header-text">
@@ -13,9 +13,35 @@
             <div class="row">
                 <div class="col s12 m6">
                     <h4>Category List</h4>
-                    <input id="categorylist" style="width: 100%;" />
+                    <input id="categorylist" style="width: 100%;" data-bind="value: catModel.selectedCategory" />
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col s12 m6">
+                    <h4>New Category</h4>
+                    <input type="text" id="newcategory" data-bind="value: catModel.newcategory" style="width:100%" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m6">
+                        <ul data-role="listview" data-style="inset" data-type="group">
+                            <li>
+                                List of Uncategorised Items
+                                <ul id="nocategoryitems" data-bind="source: catModel.source" data-template="nocatTemplate"></ul>
+                            </li>
+                        </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                    <div class="row">
+                        <div class="col s12">
+                            <button data-bind="events: {click : catModel.update}" type="button" class="btn btn-block btn-blue waves-button waves-effect waves-light">Update</button>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     <div data-role="footer">
@@ -58,3 +84,11 @@
         </div>
     </div>
 </div>
+<script id="nocatTemplate" type="text/x-kendo-template">
+    <li>
+        <label>
+            <input type="checkbox" name="notcat" class="filled-in" data-bind="value : item"  />
+            <span data-bind="text : item"></span>
+        </label>
+    </li>
+</script>

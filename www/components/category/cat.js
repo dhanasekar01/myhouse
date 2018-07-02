@@ -9,41 +9,55 @@ app.localization.registerView('cat');
 (function (parent) {
     var
         catModel = kendo.observable({
-            username: "",
-            password: "",
-            addNewItem: function () {
-                app.mobileApp.navigate("components/item/newitem.html");
-            },
-            signin: function () {
-               
+            source: [],
+            selectedCategory: "",
+            onlyCategory:[],
+            update: function(e){
+                var category = catModel.selectedCategory;
+                
+                if(catModel.newcategory){
+                    category = catModel.newcategory;
+                    catModel.onlyCategory.push({"text":category});
+                    localStorage.setItem('category',JSON.stringify(catModel.onlyCategory));
+                }
+                
+                var categorylist = [];
+
+                if(localStorage.getItem('category')){
+                    categorylist = JSON.parse(localStorage.getItem('category'));
+                }
+
+                var notcatlist = document.getElementsByName("notcat");
+                
+                for(var i = 0 ;i < notcatlist.length;i++){
+                    if(notcatlist[i].checked){
+                        categorylist.push({"name" : notcatlist[i].value, "cat":category });
+                        var selectedvalue = { "item": notcatlist[i].value };
+                        var sources = catModel.source;
+                        var index = sources.indexOf(selectedvalue);
+                        sources.splice(index, 1);
+                        localStorage.setItem('notcategory',JSON.stringify(catModel.source));
+                    }
+                }
+
+                localStorage.setItem('category',JSON.stringify(categorylist));
             }
         });
 
     parent.set('catModel', catModel);
 
     parent.set('onShow', function (e) {
-        var data = [
-            {text : "Food"},
-            {text : "House"},
-            {text : "Vegetable"},
-            {text : "Bills"},
-            {text : "Construction"},
-            {text : "EMI"},
-            {text : "Travel"},
-            {text : "Shopping"},
-            {text : "Rent"}
-        ];
+        if(localStorage.getItem('notcategory')){
+            var notcategory = JSON.parse(localStorage.getItem('notcategory'));
+            catModel.set('source',notcategory);
+        }
 
+        catModel.set('onlyCategory',JSON.parse(localStorage.getItem('onlyCategory')));
         $("#categorylist").kendoDropDownList({
+            dataSource: catModel.onlyCategory,
             dataTextField: "text",
-            dataValueField: "text",
-            valueTemplate: '<span class="selected-value" style="background-image: url(\'components/home/nocat.png\')"></span><span>Unknown Category</span>',
-            template: '<span class="k-state-default" style="background-image: url(\'components/home/#:data.text#.png\')">#:data.text#</span>',
-            dataSource: data,
-            height: 200
+            dataValueField: "text"
         });
-
-        var dropdownlist = $("#categorylist").data("kendoDropDownList");
     });
 
     parent.set('afterShow', function (e) {

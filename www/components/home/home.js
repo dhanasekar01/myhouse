@@ -13,30 +13,58 @@ app.localization.registerView('home');
             month: "",
             totalexp:"₹ 0.0",
             nocategory: 0,
+            monthNames : ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ],
             addNewItem: function () {
                 app.mobileApp.navigate("components/item/newitem.html");
             },
             saveSalary: function () {
                 var salary = [];
+
                 if(localStorage.getItem('salary')){
                     salary  = JSON.parse(localStorage.getItem('salary'));
                 }
 
+                var month = homeModel.month;
+
+                if($("input[type='radio']:checked" ).val()){
+                    month = $( "input[type='radio']:checked").val();
+                }
+
                 if(salary.length > 0){
+                    var foundSalary = false;
                     $.each(salary,function(k,v){
-                        if(v.month == homeModel.month && v.year == new Date().getFullYear()){
-                            v.salary = homeModel.salary;
+                        if(v.month == month && v.year == new Date().getFullYear()){
+                            v.salary = homeModel.newsalary;
+                            foundSalary = true;
                         }
                     });
-                    localStorage.setItem('salary',JSON.stringify(salary));
+                    if(foundSalary){
+                        localStorage.setItem('salary',JSON.stringify(salary));
+                    } else{
+                        var data = {
+                            month: month,
+                            year: new Date().getFullYear(),
+                            salary:homeModel.newsalary
+                        }
+                        salary.push(data);
+                        localStorage.setItem('salary',JSON.stringify(salary));
+                    }
+                   
                 }else{
                     var data = {
-                        month: homeModel.month,
+                        month: month,
                         year: new Date().getFullYear(),
-                        salary:homeModel.salary
+                        salary:homeModel.newsalary
                     }
                     salary.push(data);
                     localStorage.setItem('salary',JSON.stringify(salary));
+                    
+                }
+
+                if(month == homeModel.monthNames[new Date().getMonth()]){
+                    homeModel.set('salary',homeModel.newsalary);
                 }
                 
             }
@@ -45,19 +73,30 @@ app.localization.registerView('home');
     parent.set('homeModel', homeModel);
 
     parent.set('onShow', function (e) {
+        var onlyCategory = [
+        {text : "Food"},
+            {text : "House"},
+            {text : "Vegetable"},
+            {text : "Bills"},
+            {text : "Construction"},
+            {text : "EMI"},
+            {text : "Travel"},
+            {text : "Shopping"},
+            {text : "Rent"}];
+
+            if(!localStorage.getItem('onlyCategory')){
+                localStorage.setItem("onlyCategory",JSON.stringify(onlyCategory));
+            }
 
         if(localStorage.getItem('notcategory')){
             var notcategory = JSON.parse(localStorage.getItem('notcategory'));
             homeModel.set('nocategory',notcategory.length);
         }
 
-        var monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
         var d = new Date();
-        homeModel.set('month', monthNames[d.getMonth()]);
-        homeModel.set('prevmonth', monthNames[d.getMonth()-1]);
-        homeModel.set('nextmonth', monthNames[d.getMonth()+1]);
+        homeModel.set('month', homeModel.monthNames[d.getMonth()]);
+        homeModel.set('prevmonth', homeModel.monthNames[d.getMonth()-1]);
+        homeModel.set('nextmonth', homeModel.monthNames[d.getMonth()+1]);
 
 
         var currentSalary = 0.0;
@@ -66,7 +105,7 @@ app.localization.registerView('home');
             var salary = JSON.parse(localStorage.getItem('salary'));
 
             $.each(salary, function(k,v){
-                if(v.month == monthNames[d.getMonth()] && v.year == d.getFullYear() ){
+                if(v.month == homeModel.monthNames[d.getMonth()] && v.year == d.getFullYear() ){
                     currentSalary = v.salary;
                 }
             });
@@ -79,8 +118,7 @@ app.localization.registerView('home');
         });
 
         $("#modal1").modal();
-        $("#iconButton").kendoButton({
-            icon: "edit",
+        $("#salaryedit").kendoButton({
             click: function(){
                 $('#modal1').modal('open');
             }
@@ -89,7 +127,7 @@ app.localization.registerView('home');
         $('.fixed-action-btn').floatingActionButton();
 
         
-        var expenses = localStorage.getItem("expenses-"+d.getFullYear() +"-"+monthNames[d.getMonth()],data);
+        var expenses = localStorage.getItem("expenses-"+d.getFullYear() +"-"+homeModel.monthNames[d.getMonth()],data);
 
         if(expenses){
             var data = JSON.parse(expenses);
